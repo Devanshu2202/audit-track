@@ -56,6 +56,17 @@
       "auditor": "Asha Auditor",
       "errorFound": false,
       "auditDate": "2026-09-10"
+    },
+    {
+      "claimNumber": "CLM-1006",
+      "customerName": "Aarav",
+      "amount": 75000,
+      "category": "Health",
+      "status": "Needs Review",
+      "auditor": "Asha Auditor",
+      "errorFound": false,
+      "auditDate": "2026-10-06",
+      "id": "lXskGiE"
     }
   ]
 }

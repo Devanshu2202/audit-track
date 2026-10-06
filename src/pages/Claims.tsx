@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { Claim } from '../types/claim'
-import { getClaims, deleteClaim } from '../services/claimService'
+import { getClaims, deleteClaim, createClaim } from '../services/claimService'
 import StatusBadge from '../components/StatusBadge'
+import AddClaimForm from '../components/AddClaimForm'
 
 function Claims() {
     const [claims, setClaims] = useState<Claim[]>([])
@@ -29,9 +30,20 @@ function Claims() {
         }
     }
 
+    const handleAdd = async (newClaim: Omit<Claim, 'id'>) => {
+        try {
+            const saved = await createClaim(newClaim)
+            setClaims([...claims, saved])
+        } catch {
+            setError('Could not add the claim.')
+        }
+    }
+
     return (
         <div>
             <h2 className="text-2xl font-bold mb-4">Claims</h2>
+            <AddClaimForm onAdd={handleAdd} />
+            <div className="overflow-x-auto ..."></div>
 
             <div className="overflow-x-auto bg-white rounded-lg shadow">
                 <table className="w-full text-sm text-left">
