@@ -9,7 +9,7 @@ const styles: Record<ClaimStatus, string> = {
 
 function StatusBadge({ status }: { status: ClaimStatus }) {
     return (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status]}`}>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${styles[status]}`}>
             {status}
         </span>
     )

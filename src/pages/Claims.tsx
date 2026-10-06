@@ -38,13 +38,13 @@ function Claims() {
                     <tbody>
                         {claims.map((claim) => (
                             <tr key={claim.id} className="border-t hover:bg-gray-50">
-                                <td className="px-4 py-3 font-medium">{claim.claimNumber}</td>
+                                <td className="px-4 py-3 font-medium whitespace-nowrap ">{claim.claimNumber}</td>
                                 <td className="px-4 py-3">{claim.customerName}</td>
                                 <td className="px-4 py-3">{claim.category}</td>
                                 <td className="px-4 py-3">₹{claim.amount.toLocaleString('en-IN')}</td>
                                 <td className="px-4 py-3"><StatusBadge status={claim.status} /></td>
                                 <td className="px-4 py-3">{claim.errorFound ? claim.errorType : '-'}</td>
-                                <td className="px-4 py-3">{claim.auditDate}</td>
+                                <td className="px-4 py-3 whitespace-nowrap">{claim.auditDate}</td>
                             </tr>
                         ))}
                     </tbody>

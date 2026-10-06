@@ -13,7 +13,7 @@ function Login() {
 
     })
 
-    console.log("formData", formData)
+
 
 
 
