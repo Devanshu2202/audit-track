@@ -1,7 +1,12 @@
 import { useState } from "react"
 import type { ChangeEvent, FormEvent } from "react"
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../hooks/useAuth"
 
 function Login() {
+    const { login } = useAuth()
+    const navigate = useNavigate()
+    const [error, setError] = useState("")
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -24,7 +29,13 @@ function Login() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const success = login(formData.email, formData.password)
 
+        if (success) {
+            navigate("/dashboard")
+        } else {
+            setError("Invalid email or password")
+        }
     }
     return (
         <form onSubmit={handleSubmit}>
@@ -58,6 +69,7 @@ function Login() {
                         className="w-full border border-gray-300 rounded px-3 py-2 mb-6"
                     />
 
+                    {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
                     <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
                         Log in
                     </button>
