@@ -1,0 +1,10 @@
+{
+  "claims": [
+    { "id": "1", "claimNumber": "CLM-1001", "customerName": "Ravi Patel", "amount": 45000, "category": "Health", "status": "Approved", "auditor": "Asha Auditor", "errorFound": false, "auditDate": "2026-09-01" },
+    { "id": "2", "claimNumber": "CLM-1002", "customerName": "Meera Shah", "amount": 120000, "category": "Motor", "status": "Needs Review", "auditor": "Asha Auditor", "errorFound": true, "errorType": "Amount mismatch", "auditDate": "2026-09-03" },
+    { "id": "3", "claimNumber": "CLM-1003", "customerName": "John Mathew", "amount": 8500, "category": "Travel", "status": "Pending", "auditor": "Asha Auditor", "errorFound": false, "auditDate": "2026-09-05" },
+    { "id": "4", "claimNumber": "CLM-1004", "customerName": "Priya Nair", "amount": 230000, "category": "Life", "status": "Rejected", "auditor": "Asha Auditor", "errorFound": true, "errorType": "Missing document", "auditDate": "2026-09-08" },
+    { "id": "5", "claimNumber": "CLM-1005", "customerName": "Amit Verma", "amount": 67000, "category": "Health", "status": "Approved", "auditor": "Asha Auditor", "errorFound": false, "auditDate": "2026-09-10" },
+    { "id": "6", "claimNumber": "CLM-1006", "customerName": "Sara Khan", "amount": 15000, "category": "Motor", "status": "Pending", "auditor": "Asha Auditor", "errorFound": true, "errorType": "Wrong policy number", "auditDate": "2026-09-12" }
+  ]
+}
