@@ -18,3 +18,8 @@ export async function createClaim(claim: Omit<Claim, 'id'>): Promise<Claim> {
     const response = await api.post<Claim>('/claims', claim)
     return response.data
 }
+
+export async function updateClaim(claim: Claim): Promise<Claim> {
+    const response = await api.put<Claim>(`/claims/${claim.id}`, claim)
+    return response.data
+}

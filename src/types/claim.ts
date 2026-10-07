@@ -1,4 +1,5 @@
 export type ClaimStatus = 'Pending' | 'Approved' | 'Rejected' | 'Needs Review';
+export const CLAIM_STATUSES: ClaimStatus[] = ['Pending', 'Approved', 'Rejected', 'Needs Review']
 
 export interface Claim {
     id: string;

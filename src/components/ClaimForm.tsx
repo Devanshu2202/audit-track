@@ -1,28 +1,53 @@
 import { useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
 import type { Claim, ClaimStatus } from '../types/claim'
+import { CLAIM_STATUSES } from '../types/claim'
 import { useAuth } from '../hooks/useAuth'
 
 interface Props {
-    onAdd: (claim: Omit<Claim, 'id'>) => Promise<void>
+    claimToEdit: Claim | null
+    onSave: (claim: Omit<Claim, 'id'>) => Promise<void>
+    onCancel: () => void
+}
+
+type FormState = {
+    claimNumber: string
+    customerName: string
+    amount: string
+    category: string
+    status: ClaimStatus
+    errorFound: boolean
+    errorType: string
 }
 
 const CATEGORIES = ['Health', 'Motor', 'Travel', 'Life']
-const STATUSES: ClaimStatus[] = ['Pending', 'Approved', 'Rejected', 'Needs Review']
 
-const emptyForm = {
+const emptyForm: FormState = {
     claimNumber: '',
     customerName: '',
     amount: '',
     category: 'Health',
-    status: 'Pending' as ClaimStatus,
+    status: 'Pending',
     errorFound: false,
     errorType: '',
 }
 
-function AddClaimForm({ onAdd }: Props) {
+function toFormState(claim: Claim | null): FormState {
+    if (!claim) return emptyForm
+    return {
+        claimNumber: claim.claimNumber,
+        customerName: claim.customerName,
+        amount: String(claim.amount),
+        category: claim.category,
+        status: claim.status,
+        errorFound: claim.errorFound,
+        errorType: claim.errorType ?? '',
+    }
+}
+
+function ClaimForm({ claimToEdit, onSave, onCancel }: Props) {
     const { user } = useAuth()
-    const [form, setForm] = useState(emptyForm)
+    const [form, setForm] = useState<FormState>(toFormState(claimToEdit))
     const [submitting, setSubmitting] = useState(false)
 
     const handleChange = (
@@ -39,19 +64,19 @@ function AddClaimForm({ onAdd }: Props) {
         e.preventDefault()
         setSubmitting(true)
 
-        await onAdd({
+        await onSave({
             claimNumber: form.claimNumber,
             customerName: form.customerName,
             amount: Number(form.amount),
             category: form.category,
             status: form.status,
-            auditor: user?.name ?? 'Unknown',
+            auditor: claimToEdit?.auditor ?? user?.name ?? 'Unknown',
             errorFound: form.errorFound,
             errorType: form.errorFound ? form.errorType : undefined,
-            auditDate: new Date().toISOString().split('T')[0],
+            auditDate: claimToEdit?.auditDate ?? new Date().toISOString().split('T')[0],
         })
 
-        setForm(emptyForm)
+        if (!claimToEdit) setForm(emptyForm)
         setSubmitting(false)
     }
 
@@ -62,6 +87,10 @@ function AddClaimForm({ onAdd }: Props) {
             onSubmit={handleSubmit}
             className="bg-white p-4 rounded-lg shadow mb-6 grid grid-cols-1 md:grid-cols-3 gap-4"
         >
+            <h3 className="md:col-span-3 font-semibold text-gray-700">
+                {claimToEdit ? `Editing ${claimToEdit.claimNumber}` : 'Add a new claim'}
+            </h3>
+
             <input name="claimNumber" value={form.claimNumber} onChange={handleChange}
                 placeholder="Claim number (CLM-1007)" required className={inputClass} />
 
@@ -76,7 +105,7 @@ function AddClaimForm({ onAdd }: Props) {
             </select>
 
             <select name="status" value={form.status} onChange={handleChange} className={inputClass}>
-                {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                {CLAIM_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
 
             <label className="flex items-center gap-2">
@@ -89,12 +118,21 @@ function AddClaimForm({ onAdd }: Props) {
                     placeholder="Error type (e.g. Amount mismatch)" required className={inputClass} />
             )}
 
-            <button type="submit" disabled={submitting}
-                className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">
-                {submitting ? 'Adding...' : 'Add Claim'}
-            </button>
+            <div className="flex gap-2">
+                <button type="submit" disabled={submitting}
+                    className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">
+                    {submitting ? 'Saving...' : claimToEdit ? 'Save Changes' : 'Add Claim'}
+                </button>
+
+                {claimToEdit && (
+                    <button type="button" onClick={onCancel}
+                        className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                        Cancel
+                    </button>
+                )}
+            </div>
         </form>
     )
 }
 
-export default AddClaimForm
+export default ClaimForm
